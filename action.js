@@ -20,6 +20,7 @@ module.exports = class {
     const issueId = argv.issue
 
     const origIssue = await this.Jira.getIssue(issueId, {fields: ["project.id"]})
+    console.log(`Original issue:${JSON.stringify(origIssue, null, 4)}`)
     const projectId = _.get(origIssue, 'fields.project.id')
     
     const { versions } = await this.Jira.getProjectVersions(projectId)
