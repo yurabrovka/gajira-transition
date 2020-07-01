@@ -20,14 +20,17 @@ module.exports = class {
     const issueId = argv.issue
 
     const origIssue = await this.Jira.getIssue(issueId, {fields: ["project"]})
-    console.log(`Original issue:${JSON.stringify(origIssue, null, 4)}`)
     const projectId = _.get(origIssue, 'fields.project.id')
     
     const { versions } = await this.Jira.getProjectVersions(projectId)
     let versionToApply = _.find(versions, (v) => {
       if (v.name.toLowerCase() === argv.fixVersion.toLowerCase()) return true
     })
-    if (!versionToApply) {
+    if (versionToApply) {
+      console.log("Version found.")
+    }
+    else {
+      console.log("Version not found, creating a new one.")
       versionToApply = await this.Jira.createVersion(projectId, {
           archived: false,
           name: argv.fixVersion,
