@@ -61,16 +61,16 @@ module.exports = class {
     await this.Jira.transitionIssue(issueId, {
       transition: {
         id: transitionToApply.id,
-        update: {
-          fixVersions: [
-            {
-              add: {
-                name: argv.fixVersion
-              }
-            }
-          ]
-        }
       },
+      update: {
+        fixVersions: [
+          {
+            add: {
+              name: argv.fixVersion
+            }
+          }
+        ]
+      }
     })
 
     const transitionedIssue = await this.Jira.getIssue(issueId)
