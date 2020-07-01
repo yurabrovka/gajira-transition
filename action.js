@@ -22,7 +22,7 @@ module.exports = class {
     const origIssue = await this.Jira.getIssue(issueId, {fields: ["project"]})
     const projectId = _.get(origIssue, 'fields.project.id')
     
-    const { versions } = await this.Jira.getProjectVersions(projectId)
+    const versions = await this.Jira.getProjectVersions(projectId)
     console.log(`All versions:${JSON.stringify(versions, null, 4)}`)
     let versionToApply = _.find(versions, (v) => {
       if (v.name.toLowerCase() === argv.fixVersion.toLowerCase()) return true
