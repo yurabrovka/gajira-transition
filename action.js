@@ -25,12 +25,12 @@ module.exports = class {
     
     const { versions } = await this.Jira.getProjectVersions(projectId)
     let versionToApply = _.find(versions, (v) => {
-      if (v.name.toLowerCase() === argv.version.toLowerCase()) return true
+      if (v.name.toLowerCase() === argv.fixVersion.toLowerCase()) return true
     })
     if (!versionToApply) {
       versionToApply = await this.Jira.createVersion(projectId, {
           archived: false,
-          name: argv.version,
+          name: argv.fixVersion,
           projectId: projectId,
           released: false
       })
