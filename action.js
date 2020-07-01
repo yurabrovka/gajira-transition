@@ -23,7 +23,6 @@ module.exports = class {
     const projectId = _.get(origIssue, 'fields.project.id')
     
     const versions = await this.Jira.getProjectVersions(projectId)
-    console.log(`All versions:${JSON.stringify(versions, null, 4)}`)
     let versionToApply = _.find(versions, (v) => {
       if (v.name.toLowerCase() === argv.fixVersion.toLowerCase()) return true
     })
@@ -32,14 +31,13 @@ module.exports = class {
     }
     else {
       console.log("Version not found, creating a new one.")
-      versionToApply = await this.Jira.createVersion(projectId, {
+      versionToApply = await this.Jira.createVersion({
           archived: false,
           name: argv.fixVersion,
           projectId: projectId,
           released: false
       })
     }
-    console.log(`Selected version:${JSON.stringify(versionToApply, null, 4)}`)
 
     const { transitions } = await this.Jira.getIssueTransitions(issueId)
 
@@ -63,6 +61,15 @@ module.exports = class {
     await this.Jira.transitionIssue(issueId, {
       transition: {
         id: transitionToApply.id,
+        update: {
+          fixVersions: [
+            {
+              add: {
+                name: argv.fixVersion
+              }
+            }
+          ]
+        }
       },
     })
 

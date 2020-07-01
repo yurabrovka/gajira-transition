@@ -32,7 +32,6 @@ class Jira {
   }
 
   async getProjectVersions (projectId) {
-    console.log('/rest/api/2/project/${projectId}/versions')
     return this.fetch('getProjectVersions', {
       pathname: `/rest/api/2/project/${projectId}/versions`,
     }, {
@@ -40,8 +39,8 @@ class Jira {
     })
   }
 
-  async createVersion (projectId, data) {
-    return this.fetch('transitionIssue', {
+  async createVersion (data) {
+    return this.fetch('createVersion', {
       pathname: `/rest/api/2/version`,
     }, {
       method: 'POST',
