@@ -7,6 +7,9 @@ inputs:
   issue:
     description: Key of the issue to be transitioned
     required: true
+  fixVersion:
+    description: The fix version of the issue
+    required: true
   transition:
     description: The transition to apply to the issue, e.g. 'In Progress'
     required: false

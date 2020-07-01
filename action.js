@@ -18,6 +18,24 @@ module.exports = class {
     const { argv } = this
 
     const issueId = argv.issue
+
+    const origIssue = await this.Jira.getIssue(issueId, {fields: ["project.id"]})
+    const projectId = _.get(origIssue, 'fields.project.id')
+    
+    const { versions } = await this.Jira.getProjectVersions(projectId)
+    let versionToApply = _.find(versions, (v) => {
+      if (v.name.toLowerCase() === argv.version.toLowerCase()) return true
+    })
+    if (!versionToApply) {
+      versionToApply = await this.Jira.createVersion(projectId, {
+          archived: false,
+          name: argv.version,
+          projectId: projectId,
+          released: false
+      })
+    }
+    console.log(`Selected version:${JSON.stringify(versionToApply, null, 4)}`)
+
     const { transitions } = await this.Jira.getIssueTransitions(issueId)
 
     const transitionToApply = _.find(transitions, (t) => {

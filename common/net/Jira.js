@@ -31,6 +31,23 @@ class Jira {
     }
   }
 
+  async getProjectVersions (projectId) {
+    return this.fetch('getProjectVersions', {
+      pathname: `/rest/api/2/project/${projectId}/versions`,
+    }, {
+      method: 'GET',
+    })
+  }
+
+  async createVersion (projectId, data) {
+    return this.fetch('transitionIssue', {
+      pathname: `/rest/api/2/version`,
+    }, {
+      method: 'POST',
+      body: data,
+    })
+  }
+
   async getIssueTransitions (issueId) {
     return this.fetch('getIssueTransitions', {
       pathname: `/rest/api/2/issue/${issueId}/transitions`,

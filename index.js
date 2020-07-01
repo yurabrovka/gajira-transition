@@ -44,6 +44,7 @@ function parseArgs () {
   }
   return {
     issue: core.getInput('issue'),
+    fixVersion: core.getInput('fixVersion'),
     transition,
     transitionId
   }
