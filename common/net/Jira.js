@@ -32,6 +32,7 @@ class Jira {
   }
 
   async getProjectVersions (projectId) {
+    console.log('/rest/api/2/project/${projectId}/versions')
     return this.fetch('getProjectVersions', {
       pathname: `/rest/api/2/project/${projectId}/versions`,
     }, {
