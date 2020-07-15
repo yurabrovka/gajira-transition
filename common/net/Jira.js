@@ -107,6 +107,7 @@ class Jira {
       const fields = {
         originError: error,
         source: 'jira',
+        body: JSON.stringify(state.res.body)
       }
 
       delete state.req.headers
