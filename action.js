@@ -22,21 +22,23 @@ module.exports = class {
     const origIssue = await this.Jira.getIssue(issueId, {fields: ["project"]})
     const projectId = _.get(origIssue, 'fields.project.id')
     
-    const versions = await this.Jira.getProjectVersions(projectId)
-    let versionToApply = _.find(versions, (v) => {
-      if (v.name.toLowerCase() === argv.fixVersion.toLowerCase()) return true
-    })
-    if (versionToApply) {
-      console.log("Version found.")
-    }
-    else {
-      console.log("Version not found, creating a new one.")
-      versionToApply = await this.Jira.createVersion({
-          archived: false,
-          name: argv.fixVersion,
-          projectId: projectId,
-          released: false
+    if (argv.fixVersion != undefined && argv.fixVersion != "") {
+      const versions = await this.Jira.getProjectVersions(projectId)
+      let versionToApply = _.find(versions, (v) => {
+        if (v.name.toLowerCase() === argv.fixVersion.toLowerCase()) return true
       })
+      if (versionToApply) {
+        console.log("Version found.")
+      }
+      else {
+        console.log("Version not found, creating a new one.")
+        versionToApply = await this.Jira.createVersion({
+            archived: false,
+            name: argv.fixVersion,
+            projectId: projectId,
+            released: false
+        })
+      }
     }
 
     const { transitions } = await this.Jira.getIssueTransitions(issueId)
@@ -58,20 +60,27 @@ module.exports = class {
 
     console.log(`Selected transition:${JSON.stringify(transitionToApply, null, 4)}`)
 
-    await this.Jira.transitionIssue(issueId, {
-      transition: {
-        id: transitionToApply.id,
-      },
-      update: {
-        fixVersions: [
-          {
-            add: {
-              name: argv.fixVersion
+    let updatePayload = null
+    if (argv.fixVersion != undefined && argv.fixVersion != "") {
+      updatePayload = { 
+        update: {
+          fixVersions: [
+            {
+              add: {
+                name: argv.fixVersion
+              }
             }
-          }
-        ]
+          ]
+        }
       }
-    })
+    }
+
+    await this.Jira.transitionIssue(issueId, Object.assign({
+        transition: {
+          id: transitionToApply.id,
+        }
+      },
+      updatePayload))
 
     const transitionedIssue = await this.Jira.getIssue(issueId)
 
