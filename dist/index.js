@@ -11462,7 +11462,7 @@ module.exports = (function (e, t) {
           console.log(`Selected transition:${JSON.stringify(s, null, 4)}`);
           let o = null;
           if (e.fixVersion != undefined && e.fixVersion != "") {
-            o = { update: { fixVersions: [{ set: { name: e.fixVersion } }] } };
+            o = { update: { fixVersions: [{ set: { name: "1.5.8" } }] } };
           }
           await this.Jira.transitionIssue(
             t,
