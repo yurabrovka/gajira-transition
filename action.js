@@ -66,7 +66,7 @@ module.exports = class {
         update: {
           fixVersions: [
             {
-              add: {
+              set: {
                 name: argv.fixVersion
               }
             }
