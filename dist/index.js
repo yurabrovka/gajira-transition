@@ -3547,7 +3547,7 @@ module.exports = (function (e, t) {
         async transitionIssue(e, t) {
           return this.fetch(
             "transitionIssue",
-            { pathname: `/rest/api/3/issue/${e}/transitions` },
+            { pathname: `/rest/api/3/issue/${e}` },
             { method: "POST", body: t }
           );
         }
